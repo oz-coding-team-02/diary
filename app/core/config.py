@@ -1,15 +1,24 @@
-from pydantic_settings import BaseSettings
-from pydantic import ConfigDict
+from pathlib import Path
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# 경로 설정
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+ENV_PATH = BASE_DIR / ".env"
 
 # 환경 변수 설정
 class Settings(BaseSettings):
-    DB_ECHO_LOG: bool = False
+    PROJECT_NAME: str = "diary"
+    VERSION: str = "1.0.0"
+    DEBUG: bool = True
+    SECRET_KEY: str
     DATABASE_URL: str
-    SYNC_DATABASE_URL: str
 
-    model_config = ConfigDict(
-        env_file=".env",
-        extra="allow"
+    DB_ECHO_LOG: bool = False
+
+    model_config = SettingsConfigDict(
+        env_file=ENV_PATH,
+        extra="ignore",
+        env_file_encoding='utf-8'
     )
 
 settings = Settings()

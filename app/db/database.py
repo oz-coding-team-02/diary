@@ -1,22 +1,10 @@
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-DATABASE_URL = os.getenv("DATABASE_URL")
+from app.core.config import settings
 
 TORTOISE_CONFIG = {
-    "connections": {"default": DATABASE_URL},
+    "connections": {"default": settings.DATABASE_URL},
     "apps": {
         "models": {
-            # app/models/ 아래의 모든 파일들을 등록
-            "models": [
-                "app.models.user",
-                "app.models.diary",
-                "app.models.quote",
-                "app.models.question",
-                "aerich.models"
-            ],
+            "models": ["app.models.user", "aerich.models"],
             "default_connection": "default",
         },
     },
