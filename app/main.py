@@ -3,7 +3,11 @@ from tortoise.contrib.fastapi import register_tortoise
 from app.db.database import TORTOISE_CONFIG
 from app.core.config import settings
 
-app = FastAPI(title=settings.PROJECT_NAME)
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    debug=settings.DEBUG
+)
 
 register_tortoise(
     app,
@@ -14,4 +18,4 @@ register_tortoise(
 
 @app.get("/")
 async def root():
-    return {"message": "Diary API Server is running"}
+    return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
