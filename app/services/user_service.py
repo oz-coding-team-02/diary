@@ -1,12 +1,12 @@
 from fastapi import HTTPException, status
 from app.repositories.user_repo import UserRepo
 from app.core.security import verify_password, create_access_token
-from app.schemas.user import UserLogin, TokenResponse
+from app.schemas.user import UserBase, TokenResponse
 
 
 class UserService:
     @staticmethod
-    async def signup_user(data: UserLogin):
+    async def signup_user(data: UserBase):
         if await UserRepo.check_exists(data.useremail):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -19,7 +19,7 @@ class UserService:
         )
 
     @staticmethod
-    async def login_user(data: UserLogin) -> dict:
+    async def login_user(data: UserBase) -> dict:
         user = await UserRepo.get_by_useremail(data.useremail)
 
         if not user or not verify_password(data.password, user.password_hash):
