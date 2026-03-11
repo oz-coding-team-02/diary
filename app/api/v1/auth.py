@@ -25,7 +25,7 @@ async def signup(data: AuthRequest):
     return {
         'id': new_user.id,
         'username': new_user.username,
-
+        'message': "회원가입이 완료되었습니다."
     }
 
 @router.post('/login', response_model=TokenResponse)
