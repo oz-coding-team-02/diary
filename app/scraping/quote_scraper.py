@@ -51,32 +51,11 @@ for i in range(30):
         time.sleep(0.5)
 
 print("\n목록:")
-# print(quotes)
-print(f'총 개수: {len(quotes)}')
-#
-#
-# async def save_quotes_to_db(data: list[dict]):
-#     """스크래핑한 명언 데이터 리스트를 받아 데이터베이스에 저장합니다."""
-#     if not data:
-#         print("데이터베이스에 저장할 명언이 없습니다.")
-#         return
-#
-#     # Tortoise ORM의 bulk_create를 사용하여 여러 객체를 한 번에 효율적으로 생성합니다.
-#     quotes_to_create = [Quote(**item) for item in data]
-#     await Quote.bulk_create(quotes_to_create)
-#     print(f"✅ {len(quotes_to_create)}개의 명언을 데이터베이스에 성공적으로 저장했습니다.")
 
-# async def main():
-#     # --- 데이터베이스 연결 설정 ---
-#     # 동료분이 설정할 부분이므로, 실제 환경에 맞게 수정해야 합니다.
-#     await Tortoise.init(
-#         db_url="postgres://user:password@host:port/dbname",  # 실제 PostgreSQL 접속 정보로 변경해주세요.
-#         modules={"models": ["__main__"]}  # 현재 파일(__main__)에 모델이 정의되어 있음을 알림
-#     )
-#     await Tortoise.generate_schemas()  # DB에 테이블이 없으면 생성합니다.
-#
-#     scraped_quotes = scrape_quotes_sync()
-#     await save_quotes_to_db(scraped_quotes)
-#
-# if __name__ == "__main__":
-#     asyncio.run(main())
+print(f'총 개수: {len(quotes)}')
+
+import asyncio
+from app.db.seeder import save_to_db
+
+if __name__ == "__main__":
+    asyncio.run(save_to_db(quotes, "quote"))
