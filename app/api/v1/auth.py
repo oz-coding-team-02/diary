@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from app.core.security import get_password_hash, verify_password, create_access_token
+from app.core.security import verify_password, create_access_token
 from app.schemas.user import AuthRequest, TokenResponse, SignupResponse
 from app.repositories.user_repo import UserRepo
 
