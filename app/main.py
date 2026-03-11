@@ -6,7 +6,7 @@ from app.api.v1.auth import router as auth_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    version=settings.PROJECT_VERSION,
+    version=settings.VERSION,
     debug=settings.DEBUG,
 )
 

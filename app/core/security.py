@@ -1,23 +1,26 @@
-from passlib.context import CryptContext
+import bcrypt
 from datetime import datetime, timedelta
 from typing import Any, Union
 from jose import jwt
 from app.core.config import settings
 
-# bcrypt 알고리즘 설정
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 # jwt 설정
 ALGORITHMS = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
-# 비밀번호 해싱
-def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
 
-# 비밀번호 일치여부 TF 검증
+def get_password_hash(password: str) -> str:
+    pwd_bytes = password.encode("utf-8")
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(pwd_bytes, salt)
+    return hashed.decode("utf-8")
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    return bcrypt.checkpw(
+        plain_password.encode("utf-8"), hashed_password.encode("utf-8")
+    )
+
 
 # jwt 액세스 토큰 생성
 def create_access_token(subject: Union[str, Any]) -> str:
