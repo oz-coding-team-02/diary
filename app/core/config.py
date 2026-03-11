@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     DEBUG: bool = True
     SECRET_KEY: str
+    JWT_ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
     DATABASE_URL: str
 
     DB_ECHO_LOG: bool = False
