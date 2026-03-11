@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 from app.db.database import TORTOISE_CONFIG
 from app.core.config import settings
-from app.api.v1.auth import router as auth_router
+from app.api.v1.api import api_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -23,7 +23,7 @@ async def root():
     return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
 
 
-app.include_router(auth_router, prefix="/api/v1/auth", tags=["Auth"])
+app.include_router(api_router, prefix="/api/v1")
 
 if __name__ == "__main__":
     import uvicorn
