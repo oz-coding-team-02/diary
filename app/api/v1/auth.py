@@ -21,7 +21,7 @@ async def signup(data: UserCreate):
 
 @router.post('/login', response_model=TokenResponse)
 async def login(data: UserLogin):
-    user = await UserRepo.get_by_useremail(data.useremail)
+    user = await UserRepo.get_by_useremail(user.useremail)
 
     if not user or not verify_password(data.password, user.password_hash):
         raise HTTPException(
