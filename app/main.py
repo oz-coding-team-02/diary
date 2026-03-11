@@ -17,8 +17,10 @@ register_tortoise(
     add_exception_handlers=True,
 )
 
-@app.get('/')
-async def root():
-    return {'message': f'Welcome to {settings.PROJECT_NAME} API'}
 
-app.include_router(auth_router, prefix='/api/v1/auth', tags=['Auth'])
+@app.get("/")
+async def root():
+    return {"message": f"Welcome to {settings.PROJECT_NAME} API"}
+
+
+app.include_router(auth_router, prefix="/api/v1/auth", tags=["Auth"])
