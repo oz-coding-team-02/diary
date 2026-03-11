@@ -1,11 +1,7 @@
 from pydantic import BaseModel, EmailStr
 
 
-class UserCreate(BaseModel):
-    useremail: EmailStr
-    password: str
-
-class UserLogin(BaseModel):
+class UserBase(BaseModel):
     useremail: EmailStr
     password: str
 
@@ -15,4 +11,4 @@ class UserRead(BaseModel):
 
 class TokenResponse(BaseModel):
     access_token: str
-    token_type: str
+    token_type: str = "bearer"
