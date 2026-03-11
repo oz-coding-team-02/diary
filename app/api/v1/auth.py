@@ -1,51 +1,37 @@
 from fastapi import APIRouter, HTTPException, status
-from app.models.user import User
-from app.core.security import get_password_hash, verify_password, create_access_token
-from app.schemas.user import AuthRequest, TokenResponse
+from app.core.security import verify_password, create_access_token
+from app.schemas.user import AuthRequest, TokenResponse, SignupResponse
+from app.repositories.user_repo import UserRepo
 
 router = APIRouter()
 
-## API 엔드포인트 -----
 
-
-# 회원가입
-@router.post("/signup", status_code=status.HTTP_201_CREATED)
+@router.post('/signup', status_code=status.HTTP_201_CREATED, response_model=SignupResponse)
 async def signup(data: AuthRequest):
-    user_exists = await User.filter(username=data.username).exists()
-    if user_exists:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="이미 존재하는 계정입니다"
-        )
+    if await UserRepo.check_exists(data.useremail):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="이미 존재하는 이메일 입니다.")
 
-    new_user = await User.create(
-        username=data.username,
-        password_hash=get_password_hash(
-            data.password,
-        ),
+    new_user = await UserRepo.create_user(
+        useremail=data.useremail,
+        password_hash=data.password_hash,
     )
 
     return {
-        "id": new_user.id,
-        "username": new_user.username,
-        "message": "회원가입이 완료되었습니다.",
+        'id': new_user.id,
+        'useremail': new_user.useremail,
+        'message': '회원가입이 성공적으로 완료되었습니다.'
     }
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post('/login', response_model=TokenResponse)
 async def login(data: AuthRequest):
-    user = await User.get_or_none(username=data.username)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="아이디 또는 비밀번호가 잘못되었습니다.",
-        )
+    user = await UserRepo.get_by_useremail(data.useremail)
 
-    if not verify_password(data.password, user.password_hash):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="아이디 또는 비밀번호가 잘못되었습니다.",
-        )
+    if not user or not verify_password(data.password, user.password_hash):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="이메일 또는 비밀번호가 일치하지 않습니다.")
 
     access_token = create_access_token(subject=user.id)
-
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {
+        'access_token': access_token,
+        'token_type': 'bearer'
+    }

@@ -1,12 +1,8 @@
 import bcrypt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Union
 from jose import jwt
 from app.core.config import settings
-
-# jwt 설정
-ALGORITHMS = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 
 def get_password_hash(password: str) -> str:
@@ -24,7 +20,12 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 # jwt 액세스 토큰 생성
 def create_access_token(subject: Union[str, Any]) -> str:
-    expire = datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+
     to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHMS)
+
+    encoded_jwt = jwt.encode(
+        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
+    )
+
     return encoded_jwt

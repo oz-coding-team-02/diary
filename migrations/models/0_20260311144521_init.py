@@ -1,0 +1,69 @@
+from tortoise import BaseDBAsyncClient
+
+RUN_IN_TRANSACTION = True
+
+
+async def upgrade(db: BaseDBAsyncClient) -> str:
+    return """
+        CREATE TABLE IF NOT EXISTS "users" (
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "useremail" VARCHAR(255) NOT NULL UNIQUE,
+    "password_hash" VARCHAR(255) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "diaries" (
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "title" VARCHAR(50) NOT NULL,
+    "content" TEXT NOT NULL,
+    "user_id" INT NOT NULL REFERENCES "users" ("id") ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "quotes" (
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "content" TEXT NOT NULL,
+    "author" VARCHAR(100) NOT NULL DEFAULT 'Anonymous'
+);
+CREATE TABLE IF NOT EXISTS "questions" (
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "content" TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS "aerich" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "version" VARCHAR(255) NOT NULL,
+    "app" VARCHAR(100) NOT NULL,
+    "content" JSONB NOT NULL
+);"""
+
+
+async def downgrade(db: BaseDBAsyncClient) -> str:
+    return """
+        """
+
+
+MODELS_STATE = (
+    "eJztWm1P2zAQ/itVPoG0IegooH0LpYwOaDfINsQ0RW7iJhaJXWJnpWL977OdpHlrQotaaC"
+    "V/a5+7i++es3OPqz5rPrGhR/d+UBhonxvPGgY+5B9y+IeGBkajFBUAAwNPOobcQyJgQFkA"
+    "LMbBIfAo5JANqRWgEUMEcxSHnidAYnFHhJ0UCjF6DKHJiAOZKxP5/YfDCNvwCdLk6+jBHC"
+    "Lo2bk8kS3WlrjJJiOJdTE7l45itYFpES/0ceo8mjCX4Jk3wkygDsQwAAyKx7MgFOmL7OIy"
+    "k4qiTFOXKMVMjA2HIPRYptwFObAIFvzxbKgs0BGrfGweHB4fnnw6OjzhLjKTGXI8jcpLa4"
+    "8CJQM9Q5tKO2Ag8pA0prxZARTFmoCV+TvjFoZ8OJ/EfGSBTDsO3Us+FKlNiKzjNgFSctMN"
+    "tSJ2eQ12H3uTuHE1VBrd686toV9/E5X4lD56kiLd6AhLU6KTArpztCtwwo9DdEhmD2n86h"
+    "oXDfG1cd/vdSSDhDInkCumfsa9JnICISMmJmMT2Jk9lqAJMdwzbWw4sl/Z2Hykauy7NjZO"
+    "PtNX/p6FPkBeua1tFwQVLc0GFTrKaXtND9f+4vPBk+lB7DBXvO1arZoW/tRv2hf6zQ73Kv"
+    "SlF5uakW2ao3IEKB2TwDZdQN1l6CwFrobSNzgW6yFVTOXhQ2a+CGAArIcx4CTlLCn7NgIB"
+    "grTM+2kceH55Az0gSyxTHOuSM/6QyWZyPU12TYImp1mQQ5qkiq6yyW/6RQRg4MisxdpipR"
+    "wfcwTcjKhqBZdpiNJwSsOpUa80nGrsWjQcQ8yDywiOWcB2Co3W/gI6o7VfKTOEKS/d+HIM"
+    "4jnHwoBPFQMjE7ItLNbt+M6dkdvsCVs71/rdbm7DX/V7XxL3DLvtq/5pgVVxTTCXmsKZiJ"
+    "dH8WaQuoppXBK8eQ7LBJ6TACIHX8KJ5LHLMwLYmnekCz+4bR5/VbqWwwEYz2Rddmvw8nhR"
+    "kEVvOf22rZ91tGn1JWGdCvl7SGQeJYUcGWoV8qNwUQJZCWSlo5RAVo1dn0BW8m4d8o4z7p"
+    "I54qT63pFGvB2nmo4JnvgklIN2JfePg/1FLiDcq/IGIm1L/dC5Xg0DaczIHBkT215QMpGX"
+    "EjNKzKiZp8SMaqwSM5svZjZk/OowQJY7b/jGltrRC1IfNXe3aO7+hQGNddWi8jkTsi3H+A"
+    "3+diGOxhIkxu7bSeDKbh4LDZSvt/3esgPFRhZr/Gt4iG7o7/U1/Il66wdLcYYUhrt4wLsP"
+    "lul/pP3pbw=="
+)

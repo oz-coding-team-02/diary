@@ -6,8 +6,8 @@ TORTOISE_CONFIG = {
         "models": {
             "models": [
                 "app.models.user",
-                "app.models.quote",
                 "app.models.diary",
+                "app.models.quote",
                 "app.models.question",
                 "aerich.models"
             ],
