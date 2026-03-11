@@ -3,6 +3,7 @@ import time
 from bs4 import BeautifulSoup
 from deep_translator import GoogleTranslator
 
+
 trans = GoogleTranslator(source='en', target='ko')
 
 headers = {
@@ -33,18 +34,18 @@ for question_list in question_box:
         original_text = q.get_text(strip=True)
         if not original_text:
             continue
-            
+
         try:
             # 번역 실행
             translated_text = trans.translate(original_text)
             trans_questions_list.append(translated_text)
-            
+
             # 진행 상황 출력 (너무 길면 잘라서 출력)
             print(f"[성공] {original_text[:30]}... -> {translated_text[:30]}...")
-            
+
             # 차단 방지를 위한 지연 (1초 권장)
             time.sleep(0.5)
-            
+
         except Exception as e:
             print(f"[실패] {original_text[:30]}... 에러: {e}")
             # 실패 시 원문이라도 저장하거나 건너뛸 수 있음
@@ -53,3 +54,5 @@ for question_list in question_box:
 print("\n목록:")
 # print(trans_questions_list)
 print(f"총 개수: {len(trans_questions_list)}")
+
+
