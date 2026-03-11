@@ -56,3 +56,8 @@ print("\n목록:")
 print(f"총 개수: {len(trans_questions_list)}")
 
 
+import asyncio
+from app.db.seeder import save_to_db
+
+if __name__ == "__main__":
+    asyncio.run(save_to_db(trans_questions_list, "question"))
