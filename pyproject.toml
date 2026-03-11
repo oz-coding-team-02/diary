@@ -6,11 +6,15 @@ requires-python = ">=3.14"
 dependencies = [
     "aerich>=0.9.2",
     "asyncpg>=0.31.0",
+    "bcrypt>=5.0.0",
     "fastapi>=0.135.1",
+    "passlib[bcrypt]>=1.7.4",
     "pydantic>=2.12.5",
     "pydantic-settings>=2.13.1",
+    "pymysql>=1.1.2",
     "python-dotenv>=1.2.2",
-    "tortoise-orm>=0.25.4",
+    "python-jose[cryptography]>=3.5.0",
+    "tortoise-orm[asyncpg]>=0.25.4",
     "uvicorn>=0.41.0",
 ]
 

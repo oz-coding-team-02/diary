@@ -5,6 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 ENV_PATH = BASE_DIR / ".env"
 
+
 # 환경 변수 설정
 class Settings(BaseSettings):
     PROJECT_NAME: str = "diary"
@@ -16,9 +17,8 @@ class Settings(BaseSettings):
     DB_ECHO_LOG: bool = False
 
     model_config = SettingsConfigDict(
-        env_file=ENV_PATH,
-        extra="ignore",
-        env_file_encoding='utf-8'
+        env_file=ENV_PATH, extra="ignore", env_file_encoding="utf-8"
     )
+
 
 settings = Settings()
