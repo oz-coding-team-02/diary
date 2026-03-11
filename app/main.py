@@ -4,6 +4,8 @@ from app.db.database import TORTOISE_CONFIG
 from app.core.config import settings
 from app.api.v1.auth import router as auth_router
 
+from app.api.v1.diary import diary_router as diary_router
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
@@ -24,3 +26,4 @@ async def root():
 
 
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["Auth"])
+app.include_router(diary_router, prefix="/api/v1/diaries", tags=["Diary"])
