@@ -9,20 +9,23 @@ async def save_to_db(data_list: list, data_type: str = 'quote'):
 
     try:
         if data_type == 'quote':
-            for item in data_list:
-                await Quote.create(
-                    author=item.get('author', 'Anonymous'),
+            to_create = [
+                Quote(
+                    author=item.get('author','Anonymous'),
                     content=item.get('content')
-                )
+                ) for item in data_list
+            ]
+            await Quote.bulk_create(to_create)
 
         elif data_type == 'question':
-            for content in data_list:
-                await Question.create(content=content)
+            to_create = [
+                Question(content=content) for content in data_list
+            ]
 
-        print(f'성공적으로 {data_type} 데이터 {len(data_list)}개가 DB에 저장되었습니다.')
+        print(f'[성공] {data_type} 데이터 {len(data_list)}개가 DB에 저장되었습니다.')
 
     except Exception as e:
-        print(f'에러 발생 : {e}')
+        print(f'[실패] {data_type} 저장 중 오류 발생: {e}')
 
     finally:
         await Tortoise.close_connections()
