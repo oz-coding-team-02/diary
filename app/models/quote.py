@@ -1,5 +1,5 @@
 from tortoise import fields
-from .base import TimestampModel
+from app.core.base import TimestampModel
 
 
 class Quote(TimestampModel):
