@@ -1,15 +1,18 @@
+from pydantic import EmailStr
 from app.models.user import User
 from app.core.security import get_password_hash
 
-
+# noinspection PyMethodMayBeStatic
 class UserRepo:
-    async def create_user(self, useremail: str, password: str) -> User:
-        hashed_password = get_password_hash(password)
+    def __init__(self):
+        pass
 
+    async def create_user(self, useremail: EmailStr, password: str) -> User:
+        hashed_password = get_password_hash(password)
         return await User.create(useremail=useremail, password_hash=hashed_password)
 
-    async def get_by_useremail(self, useremail: str) -> User:
+    async def get_by_useremail(self, useremail: EmailStr) -> User:
         return await User.get_or_none(useremail=useremail)
 
-    async def check_exists(self, useremail: str) -> bool:
+    async def check_exists(self, useremail: EmailStr) -> bool:
         return await User.filter(useremail=useremail).exists()
