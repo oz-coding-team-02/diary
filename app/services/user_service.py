@@ -9,7 +9,7 @@ class UserService:
     async def signup_user(data: UserBase):
         if await UserRepo.check_exists(data.useremail):
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
+                status_code=status.HTTP_409_UNAUTHORIZED,
                 detail="이미 등록된 이메일입니다."
             )
 
