@@ -1,4 +1,5 @@
 from fastapi import APIRouter, status, Depends, Request, HTTPException
+from datetime import datetime, timezone
 from app.schemas.user import TokenResponse, UserBase, UserRead
 from app.services.user_service import UserService, get_user_service
 from app.core.security import hash_token
@@ -17,13 +18,11 @@ async def login(data: UserBase, service: UserService = Depends(get_user_service)
     return await service.login_user(data)
 
 
-@router.post("/logout")
+@router.post('/logout')
 async def logout(request: Request):
-    auth_header = request.headers.get("Authorization")
+    auth_header = request.headers.get('Authorization')
     if not auth_header:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="존재하지 않는 토큰입니다."
-        )
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="존재하지 않는 토큰입니다.")
 
     token = auth_header.split()[1]
 

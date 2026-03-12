@@ -26,6 +26,7 @@ class UserService:
             password=data.password,
         )
 
+
     async def login_user(self, data: UserBase) -> TokenResponse:
         user = await self.repo.get_by_useremail(data.useremail)
         if not user or not verify_password(data.password, user.password_hash):
@@ -37,10 +38,8 @@ class UserService:
         access_token = create_access_token(subject=user.useremail)
         return TokenResponse(access_token=access_token)
 
-
 def get_user_repo() -> UserRepo:
     return UserRepo()
-
 
 def get_user_service(repo: UserRepo = Depends(get_user_repo)) -> UserService:
     return UserService(repo=repo)
@@ -48,7 +47,7 @@ def get_user_service(repo: UserRepo = Depends(get_user_repo)) -> UserService:
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
-    repo: UserRepo = Depends(get_user_repo),  # 앞서 만든 DI 함수 활용
+    repo: UserRepo = Depends(get_user_repo) # 앞서 만든 DI 함수 활용
 ) -> User:
     token_hash = hash_token(token)
     is_blacklisted = await BlacklistedToken.filter(token_hash=token_hash).exists()
@@ -56,7 +55,7 @@ async def get_current_user(
     if is_blacklisted:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="로그아웃 상태입니다. 다시 로그인해주세요.",
+            detail='로그아웃 상태입니다. 다시 로그인해주세요.'
         )
 
     useremail = decode_access_token(token)
@@ -69,3 +68,4 @@ async def get_current_user(
         )
 
     return user
+
