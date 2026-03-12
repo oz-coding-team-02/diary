@@ -1,4 +1,5 @@
 import bcrypt
+import hashlib
 from fastapi import HTTPException, status
 from datetime import datetime, timedelta, timezone
 from typing import Any, Union
@@ -55,3 +56,7 @@ def decode_access_token(token: str) -> str:
 
     except JWTError:
         raise _get_auth_exception()
+
+
+def hash_token(token: str) -> str:
+    return hashlib.sha256(token.encode('utf-8')).hexdigest()
