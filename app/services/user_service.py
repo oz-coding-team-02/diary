@@ -13,20 +13,20 @@ class UserService:
         self.repo = repo
 
     async def signup_user(self, data: UserBase):
-        if await UserRepo.check_exists(data.useremail):
+        if await self.repo.check_exists(data.useremail):
             raise HTTPException(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="이미 등록된 이메일입니다.",
             )
 
-        return await UserRepo.create_user(
+        return await self.repo.create_user(
             useremail=data.useremail,
             password=data.password,
         )
 
 
     async def login_user(self, data: UserBase) -> TokenResponse:
-        user = await UserRepo.get_by_useremail(data.useremail)
+        user = await self.repo.get_by_useremail(data.useremail)
         if not user or not verify_password(data.password, user.password_hash):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
