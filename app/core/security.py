@@ -1,7 +1,8 @@
 import bcrypt
+from fastapi import HTTPException, status
 from datetime import datetime, timedelta, timezone
 from typing import Any, Union
-from jose import jwt
+from jose import jwt, JWTError
 from app.core.config import settings
 
 
@@ -18,9 +19,19 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     )
 
 
+def _get_auth_exception():
+    return HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="인증 정보가 유효하지 않습니다.",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
 # jwt 액세스 토큰 생성
 def create_access_token(subject: Union[str, Any]) -> str:
-    expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
 
     to_encode = {"exp": expire, "sub": str(subject)}
 
@@ -29,3 +40,18 @@ def create_access_token(subject: Union[str, Any]) -> str:
     )
 
     return encoded_jwt
+
+
+def decode_access_token(token: str) -> str:
+    try:
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.JWT_ALGORITHM]
+        )
+        useremail: str = payload.get("sub")
+
+        if useremail is None:
+            raise _get_auth_exception()
+        return useremail
+
+    except JWTError:
+        raise _get_auth_exception()

@@ -3,14 +3,13 @@ import time
 
 import requests
 from bs4 import BeautifulSoup
-from tortoise import Tortoise
 import os
-from dotenv import load_dotenv
+from app.db.seeder import save_to_db
 
 cookies = {
     "PHPSESSID": os.getenv("PHPSESSID"),
     "2a0d2363701f23f8a75028924a3af643": os.getenv("COOKIE_KEY_1"),
-    "e1192aefb64683cc97abb83c71057733": os.getenv("COOKIE_KEY_2")
+    "e1192aefb64683cc97abb83c71057733": os.getenv("COOKIE_KEY_2"),
 }
 
 headers = {
@@ -46,16 +45,14 @@ for i in range(30):
     for a, c in zip(authors, contents):
         author = a.get_text(strip=True).split("- ")[-1]
         content = c.get_text(strip=True).split("-")[0]
-        print(f'author: {author}, content: {content}')
+        print(f"author: {author}, content: {content}")
         quotes.append({"author": author, "content": content})
         time.sleep(0.5)
 
 print("\n목록:")
 
-print(f'총 개수: {len(quotes)}')
+print(f"총 개수: {len(quotes)}")
 
-import asyncio
-from app.db.seeder import save_to_db
 
 if __name__ == "__main__":
     asyncio.run(save_to_db(quotes, "quote"))
