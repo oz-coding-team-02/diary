@@ -21,6 +21,8 @@ async def save_to_db(data_list: list, data_type: Literal['quote', 'question'] ):
             ]
             await Quote.bulk_create(to_create)
 
+
+
         elif data_type == 'question':
             to_create = [
                 Question(content=content) for content in data_list
