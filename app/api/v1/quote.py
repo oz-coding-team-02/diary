@@ -1,13 +1,25 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status
+from fastapi.params import Depends
 
-from app.repositories.quote_repo import QuoteRepository
-from app.schemas.quote import QuoteRead
+from app.schemas.quote import QuoteRead, BookmarkCreate, BookmarkToggleResponse, BookmarkedQuoteRead
+from app.services.quote_service import QuoteService
 
-router = APIRouter(prefix="/api/v1/quote", tags=["Quote"])
+router = APIRouter(prefix="/quote", tags=["Quote"])
+
+def get_quote_service() -> QuoteService:
+    return QuoteService()
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=QuoteRead)
-async def get_quote():
-    quote = QuoteRepository.get_random_quote_one()
-    if quote is None:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Quote not found")
-    return quote
+async def get_quote(user_id: int, service: QuoteService = Depends(get_quote_service)):
+    return await service.get_random_quote_or_none(user_id=user_id)
+
+@router.post("/bookmark", status_code=status.HTTP_200_OK, response_model=BookmarkToggleResponse)
+async def toggle_bookmark(data: BookmarkCreate, service: QuoteService = Depends(get_quote_service)):
+    is_bookmarked = await service.toggle_bookmark(data)
+    message = "북마크 추가" if is_bookmarked else "북마크 삭제"
+    return {"is_bookmarked": is_bookmarked, "message": message}
+
+@router.get("/bookmarked", status_code=status.HTTP_200_OK, response_model=list[BookmarkedQuoteRead])
+async def get_bookmarked_quotes(user_id: int, service: QuoteService = Depends(get_quote_service)):
+    return await service.get_bookmarked_quotes_for_user(user_id=user_id)
+    
