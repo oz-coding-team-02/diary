@@ -4,7 +4,7 @@ from fastapi.params import Depends
 from app.schemas.quote import QuoteRead, BookmarkCreate, BookmarkToggleResponse, BookmarkedQuoteRead
 from app.services.quote_service import QuoteService
 
-router = APIRouter(prefix="/quote", tags=["Quote"])
+router = APIRouter()
 
 def get_quote_service() -> QuoteService:
     return QuoteService()
