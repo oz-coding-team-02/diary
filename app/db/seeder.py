@@ -6,18 +6,16 @@ from app.models.quote import Quote
 from app.models.question import Question
 
 
-
-
 async def save_to_db(data_list: list, data_type: Literal['quote', 'question'] ):
     await Tortoise.init(config=TORTOISE_CONFIG)
 
     try:
-        if data_type == 'quote':
+        if data_type == "quote":
             to_create = [
                 Quote(
-                    author=item.get('author','Anonymous'),
-                    content=item.get('content')
-                ) for item in data_list
+                    author=item.get("author", "Anonymous"), content=item.get("content")
+                )
+                for item in data_list
             ]
             await Quote.bulk_create(to_create)
 
