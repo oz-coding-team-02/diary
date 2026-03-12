@@ -9,11 +9,13 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 class UserService:
-    @staticmethod
-    async def signup_user(data: UserBase):
+    def __init__(self, repo: UserRepo):
+        self.repo = repo
+
+    async def signup_user(self, data: UserBase):
         if await UserRepo.check_exists(data.useremail):
             raise HTTPException(
-                status_code=status.HTTP_409_UNAUTHORIZED,
+                status_code=status.HTTP_409_CONFLICT,
                 detail="이미 등록된 이메일입니다.",
             )
 
@@ -22,35 +24,35 @@ class UserService:
             password=data.password,
         )
 
-    @staticmethod
-    async def login_user(data: UserBase) -> TokenResponse:
-        user = await UserRepo.get_by_useremail(data.useremail)
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="이메일 또는 비밀번호가 잘못되었습니다.",
-            )
 
-        if not verify_password(data.password, user.password_hash):
+    async def login_user(self, data: UserBase) -> TokenResponse:
+        user = await UserRepo.get_by_useremail(data.useremail)
+        if not user or not verify_password(data.password, user.password_hash):
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="이메일 또는 비밀번호가 잘못되었습니다.",
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="로그인 정보가 정확하지 않습니다.",
             )
 
         access_token = create_access_token(subject=user.useremail)
-
         return TokenResponse(access_token=access_token)
 
-    @staticmethod
-    async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
-        useremail = decode_access_token(token)
+def get_user_repo() -> UserRepo:
+    return UserRepo()
 
-        user = await UserRepo.get_by_useremail(useremail)
+def get_user_service(repo: UserRepo = Depends(get_user_repo)) -> UserService:
+    return UserService(repo=repo)
 
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="존재하지 않는 사용자입니다.",
-            )
 
-        return user
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
+    useremail = decode_access_token(token)
+
+    user = await UserRepo.get_by_useremail(useremail)
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="존재하지 않는 사용자입니다.",
+        )
+
+    return user
+
