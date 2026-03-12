@@ -33,7 +33,11 @@ class QuoteService:
         result_list = []
         for bookmark in bookmarks:
             result_list.append(
-                BookmarkedQuoteRead(id=bookmark.quote.id, content=bookmark.quote.content, author=bookmark.quote.author)
+                BookmarkedQuoteRead(
+                    id=bookmark.quote.id,
+                    content=bookmark.quote.content,
+                    author=bookmark.quote.author,
+                )
             )
 
         return result_list
