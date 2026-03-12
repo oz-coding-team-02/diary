@@ -28,5 +28,5 @@ class UserService:
                 detail="이메일 또는 비밀번호가 일치하지 않습니다."
             )
 
-        access_token = create_access_token(subject=user.id)
+        access_token = create_access_token(subject=user.useremail)
         return {"access_token": access_token}
