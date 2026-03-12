@@ -1,12 +1,6 @@
 from fastapi import APIRouter, status
 from fastapi.params import Depends
 
-from app.schemas.quote import (
-    QuoteRead,
-    BookmarkCreate,
-    BookmarkToggleResponse,
-    BookmarkedQuoteRead,
-)
 from app.schemas.quote import QuoteRead, BookmarkCreate, BookmarkToggleResponse, BookmarkedQuoteRead
 from app.repositories.quote_repo import QuoteRepository
 from app.services.quote_service import QuoteService
