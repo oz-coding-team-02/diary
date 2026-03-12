@@ -23,7 +23,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
         # DB에서는 int여야 하지만 jwt 토큰은 str로 정의되어있음.
         # 조회 등 DB와 통신할 때는 int로 형변환
 
-        if user_id is None:
+        if useremail is None:
             raise credentials_exception
 
     except JWTError:
