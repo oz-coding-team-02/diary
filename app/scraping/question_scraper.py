@@ -1,21 +1,24 @@
 import requests
 import time
+import asyncio
 from bs4 import BeautifulSoup
 from deep_translator import GoogleTranslator
+from app.db.seeder import save_to_db
 
-
-trans = GoogleTranslator(source='en', target='ko')
+trans = GoogleTranslator(source="en", target="ko")
 
 headers = {
-    'Referer': 'https://conversationstartersworld.com/deep-conversation-topics/',
-    'Upgrade-Insecure-Requests': '1',
-    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Whale/4.36.368.7 Safari/537.36',
-    'sec-ch-ua': '"Chromium";v="144", "Whale";v="4", "Not.A/Brand";v="99"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"macOS"',
+    "Referer": "https://conversationstartersworld.com/deep-conversation-topics/",
+    "Upgrade-Insecure-Requests": "1",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Whale/4.36.368.7 Safari/537.36",
+    "sec-ch-ua": '"Chromium";v="144", "Whale";v="4", "Not.A/Brand";v="99"',
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": '"macOS"',
 }
 
-response = requests.get('https://conversationstartersworld.com/philosophical-questions/', headers=headers)
+response = requests.get(
+    "https://conversationstartersworld.com/philosophical-questions/", headers=headers
+)
 response.raise_for_status()
 soup = BeautifulSoup(response.text, "lxml")
 
@@ -55,9 +58,6 @@ print("\n목록:")
 # print(trans_questions_list)
 print(f"총 개수: {len(trans_questions_list)}")
 
-
-import asyncio
-from app.db.seeder import save_to_db
 
 if __name__ == "__main__":
     asyncio.run(save_to_db(trans_questions_list, "question"))

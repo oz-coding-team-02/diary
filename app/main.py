@@ -5,9 +5,7 @@ from app.core.config import settings
 from app.api.v1.api import api_router
 
 app = FastAPI(
-    title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    debug=settings.DEBUG
+    title=settings.PROJECT_NAME, version=settings.VERSION, debug=settings.DEBUG
 )
 
 register_tortoise(

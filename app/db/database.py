@@ -9,7 +9,7 @@ TORTOISE_CONFIG = {
                 "app.models.diary",
                 "app.models.quote",
                 "app.models.question",
-                "aerich.models"
+                "aerich.models",
             ],
             "default_connection": "default",
         },
