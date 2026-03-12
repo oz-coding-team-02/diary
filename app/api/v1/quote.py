@@ -14,8 +14,11 @@ from app.services.quote_service import QuoteService
 router = APIRouter()
 
 
-def get_quote_service() -> QuoteService:
-    return QuoteService()
+def get_quote_repo() -> QuoteRepository:
+    return QuoteRepository()
+
+def get_quote_service(repo: QuoteRepository = Depends(get_quote_repo)) -> QuoteService:
+    return QuoteService(repo=repo)
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=QuoteRead)
 async def get_quote(user_id: int, service: QuoteService = Depends(get_quote_service)):
