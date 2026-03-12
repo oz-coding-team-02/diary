@@ -1,15 +1,18 @@
 from fastapi import HTTPException, status
+from typing import Optional # Optional 타입을 사용하기 위해 추가
 
 from app.repositories.question_repo import QuestionRepository
 from app.schemas.question import QuestionRead
 
 
 class QuestionService:
-    @staticmethod
-    async def get_random_question_or_none() -> QuestionRead:
-        question = await QuestionRepository.get_random_question_one()
+    def __init__(self, repo: QuestionRepository):
+        self.repo = repo
 
-        if question is None:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Question not found")
+    async def get_random_question_for_user(self, user_id: int) -> Optional[QuestionRead]:
 
-        return QuestionRead(content=question.content)
+        seen_question_ids = await self.repo.get_seen_question_ids_for_user(user_id)
+        question = await self.repo.get_random_question_excluding_ids(excluded_ids=seen_question_ids)
+        if question:
+            return question
+        return await self.repo.get_random_question()
