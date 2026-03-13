@@ -26,6 +26,8 @@ async def get_diary(
     if not result:
         raise HTTPException(status_code=404, detail="일기를 찾을 수 없습니다.")
 
+    return result
+
 
 @router.post(
     "/register", response_model=DiaryPlusID, status_code=status.HTTP_201_CREATED
