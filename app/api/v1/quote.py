@@ -9,14 +9,18 @@ from app.schemas.quote import (
     BookmarkToggleResponse,
     BookmarkedQuoteRead,
 )
+from app.schemas.quote import QuoteRead, BookmarkCreate, BookmarkToggleResponse, BookmarkedQuoteRead
+from app.repositories.quote_repo import QuoteRepository
 from app.services.quote_service import QuoteService
 
-router = APIRouter(prefix="/quote", tags=["quote"])
+router = APIRouter()
 
 
-def get_quote_service() -> QuoteService:
-    return QuoteService()
+def get_quote_repo() -> QuoteRepository:
+    return QuoteRepository()
 
+def get_quote_service(repo: QuoteRepository = Depends(get_quote_repo)) -> QuoteService:
+    return QuoteService(repo=repo)
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=QuoteRead)
 async def get_quote(
