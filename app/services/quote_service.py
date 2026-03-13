@@ -23,7 +23,10 @@ class QuoteService:
         )
 
         return QuoteRead(
-            content=quote.content, author=quote.author, is_bookmarked=is_bookmarked
+            id=quote.id,
+            content=quote.content,
+            author=quote.author,
+            is_bookmarked=is_bookmarked,
         )
 
     async def toggle_bookmark(self, data: BookmarkCreate) -> bool:
