@@ -6,6 +6,7 @@ from app.core.security import verify_password, create_access_token, decode_acces
 from app.schemas.user import UserBase, TokenResponse
 from app.models.user import User
 from app.models.blacklisted_token import BlacklistedToken
+from typing import List
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -39,6 +40,9 @@ class UserService:
         access_token = create_access_token(subject=user.useremail)
         return TokenResponse(access_token=access_token)
 
+    async def get_all_users(self) -> List[User]:
+        return await self.repo.get_all()
+
 
 def get_user_repo() -> UserRepo:
     return UserRepo()
@@ -71,3 +75,14 @@ async def get_current_user(
         )
 
     return user
+
+
+async def get_current_admin_user(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    if not current_user.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="관리자 권한이 없습니다.",
+        )
+    return current_user

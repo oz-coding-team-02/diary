@@ -10,20 +10,12 @@ from app.schemas.quote import (
 )
 from app.schemas.user import BookmarkRead
 from app.repositories.quote_repo import QuoteRepository
-from app.services.quote_service import QuoteService
+from app.services.quote_service import QuoteService, get_quote_service
 
 router = APIRouter()
 
 
-def get_quote_repo() -> QuoteRepository:
-    return QuoteRepository()
-
-
-def get_quote_service(repo: QuoteRepository = Depends(get_quote_repo)) -> QuoteService:
-    return QuoteService(repo=repo)
-
-
-@router.get("", status_code=status.HTTP_200_OK, response_model=QuoteRead)
+@router.get("", status_code=status.HTTP_200_OK, response_model=QuoteRead, summary="랜덤 명언 조회")
 async def get_quote(
     current_user: User = Depends(get_current_user),
     service: QuoteService = Depends(get_quote_service),
@@ -32,7 +24,10 @@ async def get_quote(
 
 
 @router.post(
-    "/bookmark", status_code=status.HTTP_200_OK, response_model=BookmarkToggleResponse
+    "/bookmark",
+    status_code=status.HTTP_200_OK,
+    response_model=BookmarkToggleResponse,
+    summary="명언 북마크 등록/해제",
 )
 async def toggle_bookmark(
     data: BookmarkCreate,
@@ -45,7 +40,9 @@ async def toggle_bookmark(
     return {"is_bookmarked": is_bookmarked, "message": message}
 
 
-@router.get("/bookmarked", response_model=list[BookmarkRead])
+@router.get(
+    "/bookmarked", response_model=list[BookmarkRead], summary="북마크한 명언 목록 조회"
+)
 async def get_bookmarked_quotes(
     current_user: User = Depends(get_current_user),
     service: QuoteService = Depends(get_quote_service),
