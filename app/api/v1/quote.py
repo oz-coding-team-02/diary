@@ -11,7 +11,7 @@ from app.schemas.quote import (
 )
 from app.services.quote_service import QuoteService
 
-router = APIRouter(prefix="/quote", tags=["Quote"])
+router = APIRouter(prefix="/quote", tags=["quote"])
 
 
 def get_quote_service() -> QuoteService:

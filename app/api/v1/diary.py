@@ -8,8 +8,8 @@ from app.services.diary_service import DiaryService, get_diary_service
 router = APIRouter()
 
 
-@router.get("/me", response_model=List[DiaryPlusID])
-async def get_me(
+@router.get("/my-diaries", response_model=List[DiaryPlusID])
+async def get_my_diaries(
     user: User = Depends(get_current_user),
     service: DiaryService = Depends(get_diary_service),
 ):
