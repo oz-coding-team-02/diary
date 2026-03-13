@@ -10,6 +10,7 @@ TORTOISE_CONFIG = {
                 "app.models.quote",
                 "app.models.question",
                 "app.models.bookmark",
+                "app.models.user_question",
                 "app.models.blacklisted_token",
                 "aerich.models",
             ],

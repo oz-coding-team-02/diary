@@ -5,6 +5,7 @@ from app.api.v1.users import router as user_router
 from app.api.v1.diary import router as diary_router
 from app.api.v1.quote import router as quote_router
 
+from app.api.v1.question import router as question_router
 api_router = APIRouter()
 
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])

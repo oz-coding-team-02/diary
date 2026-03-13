@@ -7,6 +7,9 @@ from app.models.quote import Quote
 
 
 class QuoteRepository:
+    def __init__(self):
+        pass
+
     async def get_random_quote_one(self) -> Optional[Quote]:
         # Optional[Quote] -> 타입이 Quote나 None이 반환될 수 있음을 표시 -> db에 데이터가 없을 경우 None을 return함
         return await Quote.annotate(idx=Random()).order_by("idx").first()
