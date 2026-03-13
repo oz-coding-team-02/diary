@@ -9,6 +9,7 @@ TORTOISE_CONFIG = {
                 "app.models.diary",
                 "app.models.quote",
                 "app.models.question",
+                "app.models.blacklisted_token",
                 "aerich.models",
             ],
             "default_connection": "default",

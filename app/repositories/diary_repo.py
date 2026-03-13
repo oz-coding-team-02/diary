@@ -1,6 +1,7 @@
 from app.models.diary import Diary
 from app.models.user import User
 
+
 # noinspection PyMethodMayBeStatic
 class DiaryRepo:
     async def get_diary(self, diary_id: int, user: User):
@@ -13,9 +14,7 @@ class DiaryRepo:
 
     async def make_new_diary(self, data, user: User):
         result = await Diary.create(
-            title=data.title,
-            content=data.content,
-            user_id=user.id
+            title=data.title, content=data.content, user_id=user.id
         )
         return result
 
