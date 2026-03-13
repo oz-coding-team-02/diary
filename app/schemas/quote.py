@@ -15,9 +15,3 @@ class BookmarkCreate(BaseModel):
 class BookmarkToggleResponse(BaseModel):
     is_bookmarked: bool
     message: str
-
-
-class BookmarkedQuoteRead(BaseModel):
-    id: int
-    content: str
-    author: str

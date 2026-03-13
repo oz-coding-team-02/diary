@@ -1,4 +1,5 @@
 from fastapi import APIRouter, status, Depends, Request, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 from app.schemas.user import TokenResponse, UserBase, UserRead
 from app.services.user_service import UserService, get_user_service
 from app.core.security import hash_token
@@ -13,7 +14,10 @@ async def signup(data: UserBase, service: UserService = Depends(get_user_service
 
 
 @router.post("/login", response_model=TokenResponse)
-async def login(data: UserBase, service: UserService = Depends(get_user_service)):
+async def login(
+    data: OAuth2PasswordRequestForm = Depends(),
+    service: UserService = Depends(get_user_service),
+):
     return await service.login_user(data)
 
 
