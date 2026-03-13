@@ -7,7 +7,7 @@ from app.schemas.user import UserBase, TokenResponse
 from app.models.user import User
 from app.models.blacklisted_token import BlacklistedToken
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 
 class UserService:
