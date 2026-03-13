@@ -19,7 +19,10 @@ def get_quote_service() -> QuoteService:
 
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=QuoteRead)
-async def get_quote(current_user: User = Depends(get_current_user), service: QuoteService = Depends(get_quote_service)):
+async def get_quote(
+    current_user: User = Depends(get_current_user),
+    service: QuoteService = Depends(get_quote_service),
+):
     return await service.get_random_quote_or_none(user_id=current_user.id)
 
 
@@ -27,7 +30,9 @@ async def get_quote(current_user: User = Depends(get_current_user), service: Quo
     "/bookmark", status_code=status.HTTP_200_OK, response_model=BookmarkToggleResponse
 )
 async def toggle_bookmark(
-    data: BookmarkCreate, current_user: User = Depends(get_current_user), service: QuoteService = Depends(get_quote_service)
+    data: BookmarkCreate,
+    current_user: User = Depends(get_current_user),
+    service: QuoteService = Depends(get_quote_service),
 ):
     data.user_id = current_user.id
     is_bookmarked = await service.toggle_bookmark(data)
@@ -38,6 +43,6 @@ async def toggle_bookmark(
 @router.get("/bookmarked", response_model=list[BookmarkedQuoteRead])
 async def get_bookmarked_quotes(
     current_user: User = Depends(get_current_user),
-    service: QuoteService = Depends(get_quote_service)
+    service: QuoteService = Depends(get_quote_service),
 ):
     return await service.get_bookmarked_quotes_for_user(user_id=current_user.id)

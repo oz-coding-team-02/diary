@@ -1,6 +1,7 @@
 from fastapi import Depends
 from app.repositories.diary_repo import DiaryRepo
 
+
 class DiaryService:
     def __init__(self, repo: DiaryRepo):
         self.repo = repo
@@ -20,8 +21,10 @@ class DiaryService:
     async def del_diary(self, diary_id, user):
         return await self.repo.del_r_diary(diary_id, user)
 
+
 def get_diary_repo() -> DiaryRepo:
     return DiaryRepo()
+
 
 def get_diary_service(repo: DiaryRepo = Depends(get_diary_repo)) -> DiaryService:
     return DiaryService(repo=repo)

@@ -8,5 +8,6 @@ router = APIRouter()
 
 @router.get("/me", response_model=UserMeRead)
 async def get_me(current_user: User = Depends(get_current_user)):
-    await current_user.fetch_related('bookmarks__quote')
+    await current_user.fetch_related("bookmarks__quote", "diaries")
+
     return current_user
