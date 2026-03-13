@@ -25,7 +25,7 @@ async def get_all_users(service: UserService = Depends(get_user_service)):
     return await service.get_all_users()
 
 
-@router.get("/me", response_model=UserMeRead)
+@router.get("/me", response_model=UserMeRead, summary="내 정보 조회")
 async def get_me(current_user: User = Depends(get_current_user)):
     await current_user.fetch_related("bookmarks__quote", "diaries")
 

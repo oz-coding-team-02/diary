@@ -8,12 +8,17 @@ from app.models.blacklisted_token import BlacklistedToken
 router = APIRouter()
 
 
-@router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=UserRead)
+@router.post(
+    "/signup",
+    status_code=status.HTTP_201_CREATED,
+    response_model=UserRead,
+    summary="회원가입",
+)
 async def signup(data: UserBase, service: UserService = Depends(get_user_service)):
     return await service.signup_user(data)
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post("/login", response_model=TokenResponse, summary="로그인")
 async def login(
     data: OAuth2PasswordRequestForm = Depends(),
     service: UserService = Depends(get_user_service),
@@ -21,7 +26,7 @@ async def login(
     return await service.login_user(data)
 
 
-@router.post("/logout")
+@router.post("/logout", summary="로그아웃")
 async def logout(request: Request):
     auth_header = request.headers.get("Authorization")
     if not auth_header:
