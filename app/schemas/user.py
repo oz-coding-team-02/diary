@@ -12,7 +12,6 @@ class UserRead(BaseModel):
     id: int
     useremail: EmailStr
 
-    # dict, orm 전환
     model_config = ConfigDict(from_attributes=True)
 
 
