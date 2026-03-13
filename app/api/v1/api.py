@@ -16,4 +16,6 @@ api_router.include_router(diary_router, prefix="/diary", tags=["diary"])
 api_router.include_router(user_router, prefix='/users', tags=["users"])
 api_router.include_router(quote_router, prefix='/quotes', tags=["quotes"])
 
+api_router.include_router(user_router, prefix="/users", tags=["users"])
+api_router.include_router(quote_router, prefix="/quotes", tags=["quotes"])
 
