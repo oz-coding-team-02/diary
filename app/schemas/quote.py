@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class QuoteRead(BaseModel):
+    id: int
     content: str
     author: str
     is_bookmarked: bool
