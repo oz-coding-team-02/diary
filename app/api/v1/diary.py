@@ -86,4 +86,7 @@ async def delete_diary(
     user: User = Depends(get_current_user),
     service: DiaryService = Depends(get_diary_service),
 ):
-    return await service.del_diary(diary_id, user)
+    result = await service.del_diary(diary_id, user)
+    if not result:
+        raise HTTPException(status_code=404, detail="삭제할 일기를 찾을 수 없습니다.")
+    return result
