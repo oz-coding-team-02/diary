@@ -1,4 +1,7 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
+from typing import List
+from app.schemas.quote import BookmarkedQuoteRead
+from app.schemas.diary import DiaryPlusID
 
 
 class UserBase(BaseModel):
@@ -9,6 +12,14 @@ class UserBase(BaseModel):
 class UserRead(BaseModel):
     id: int
     useremail: EmailStr
+
+    # dict, orm 전환
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserMeRead(UserRead):
+    bookmarks: List[BookmarkedQuoteRead] = []
+    diaries: List[DiaryPlusID] = []
 
 
 class TokenResponse(BaseModel):
