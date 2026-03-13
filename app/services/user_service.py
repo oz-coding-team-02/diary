@@ -26,8 +26,10 @@ class UserService:
             password=data.password,
         )
 
-    async def login_user(self, data: UserBase) -> TokenResponse:
-        user = await self.repo.get_by_useremail(data.useremail)
+    async def login_user(self, data) -> TokenResponse:
+        email = getattr(data, "useremail", getattr(data, "username", None))
+        user = await self.repo.get_by_useremail(email)
+
         if not user or not verify_password(data.password, user.password_hash):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
