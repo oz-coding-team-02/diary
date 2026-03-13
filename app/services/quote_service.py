@@ -1,7 +1,8 @@
 from fastapi import HTTPException, status
 
 from app.repositories.quote_repo import QuoteRepository
-from app.schemas.quote import BookmarkCreate, QuoteRead, BookmarkedQuoteRead
+from app.schemas.quote import BookmarkCreate, QuoteRead
+from app.schemas.user import BookmarkRead
 
 
 class QuoteService:
@@ -41,16 +42,6 @@ class QuoteService:
 
     async def get_bookmarked_quotes_for_user(
         self, user_id: int
-    ) -> list[BookmarkedQuoteRead]:
+    ) -> list[BookmarkRead]:
         bookmarks = await self.repo.get_bookmarked_quotes_for_user(user_id=user_id)
-        result_list = []
-        for bookmark in bookmarks:
-            result_list.append(
-                BookmarkedQuoteRead(
-                    id=bookmark.quote.id,
-                    content=bookmark.quote.content,
-                    author=bookmark.quote.author,
-                )
-            )
-
-        return result_list
+        return bookmarks

@@ -7,8 +7,8 @@ from app.schemas.quote import (
     QuoteRead,
     BookmarkCreate,
     BookmarkToggleResponse,
-    BookmarkedQuoteRead,
 )
+from app.schemas.user import BookmarkRead
 from app.repositories.quote_repo import QuoteRepository
 from app.services.quote_service import QuoteService
 
@@ -45,7 +45,7 @@ async def toggle_bookmark(
     return {"is_bookmarked": is_bookmarked, "message": message}
 
 
-@router.get("/bookmarked", response_model=list[BookmarkedQuoteRead])
+@router.get("/bookmarked", response_model=list[BookmarkRead])
 async def get_bookmarked_quotes(
     current_user: User = Depends(get_current_user),
     service: QuoteService = Depends(get_quote_service),

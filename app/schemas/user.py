@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import List
-from app.schemas.quote import BookmarkedQuoteRead
 from app.schemas.diary import DiaryPlusID
 
 
@@ -18,7 +17,7 @@ class UserRead(BaseModel):
 
 
 class UserMeRead(UserRead):
-    bookmarks: List[BookmarkedQuoteRead] = []
+    bookmarks: List["BookmarkRead"] = []
     diaries: List[DiaryPlusID] = []
 
 
