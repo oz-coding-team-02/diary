@@ -50,7 +50,7 @@ def get_user_service(repo: UserRepo = Depends(get_user_repo)) -> UserService:
 
 async def get_current_user(
     token: str = Depends(oauth2_scheme),
-    repo: UserRepo = Depends(get_user_repo),  # 앞서 만든 DI 함수 활용
+    repo: UserRepo = Depends(get_user_repo),
 ) -> User:
     token_hash = hash_token(token)
     is_blacklisted = await BlacklistedToken.filter(token_hash=token_hash).exists()

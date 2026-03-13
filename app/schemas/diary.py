@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
 
 class DiaryBase(BaseModel):
@@ -7,7 +8,7 @@ class DiaryBase(BaseModel):
     content: str
 
     class Config:
-        from_attributes = True  # Pydantic v2 (v1은 orm_mode = True)
+        from_attributes = True
 
 
 class DiaryPlusID(DiaryBase):
@@ -21,3 +22,9 @@ class DiaryDelete(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class WritingPromptResponse(BaseModel):
+    quote_id: Optional[int] = None
+    quote: str
+    question: str

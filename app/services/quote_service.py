@@ -1,4 +1,4 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, Depends
 
 from app.repositories.quote_repo import QuoteRepository
 from app.schemas.quote import BookmarkCreate, QuoteRead
@@ -45,3 +45,11 @@ class QuoteService:
     ) -> list[BookmarkRead]:
         bookmarks = await self.repo.get_bookmarked_quotes_for_user(user_id=user_id)
         return bookmarks
+
+
+def get_quote_repo() -> QuoteRepository:
+    return QuoteRepository()
+
+
+def get_quote_service(repo: QuoteRepository = Depends(get_quote_repo)) -> QuoteService:
+    return QuoteService(repo=repo)
