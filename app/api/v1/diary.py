@@ -35,7 +35,7 @@ async def get_writing_prompt(
     )
 
 
-@router.get("/my-diaries", response_model=List[DiaryPlusID])
+@router.get("/my-diaries", response_model=List[DiaryPlusID], summary="내 모든 다이어리 조회")
 async def get_my_diaries(
     user: User = Depends(get_current_user),
     service: DiaryService = Depends(get_diary_service),
@@ -43,7 +43,7 @@ async def get_my_diaries(
     return await service.get_all_diaries(user)
 
 
-@router.get("/{diary_id}", response_model=DiaryPlusID)
+@router.get("/{diary_id}", response_model=DiaryPlusID, summary="특정 다이어리 조회")
 async def get_diary(
     diary_id: int,
     user: User = Depends(get_current_user),
@@ -57,7 +57,10 @@ async def get_diary(
 
 
 @router.post(
-    "/register", response_model=DiaryPlusID, status_code=status.HTTP_201_CREATED
+    "/register",
+    response_model=DiaryPlusID,
+    status_code=status.HTTP_201_CREATED,
+    summary="다이어리 작성",
 )
 async def create_diary(
     data: DiaryBase,
@@ -67,7 +70,7 @@ async def create_diary(
     return await service.make_diary(data, user)
 
 
-@router.put("/{diary_id}", response_model=DiaryPlusID)
+@router.put("/{diary_id}", response_model=DiaryPlusID, summary="다이어리 수정")
 async def mod_diary(
     diary_id: int,
     mod_data: DiaryBase,
@@ -77,7 +80,7 @@ async def mod_diary(
     return await service.modify_diary(diary_id, mod_data, user)
 
 
-@router.delete("/{diary_id}", response_model=DiaryDelete)
+@router.delete("/{diary_id}", response_model=DiaryDelete, summary="다이어리 삭제")
 async def delete_diary(
     diary_id: int,
     user: User = Depends(get_current_user),

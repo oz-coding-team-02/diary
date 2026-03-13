@@ -1,5 +1,5 @@
 from pydantic import EmailStr
-from typing import Union
+from typing import Union, List
 from app.models.user import User
 from app.core.security import get_password_hash
 
@@ -18,3 +18,6 @@ class UserRepo:
 
     async def check_exists(self, useremail: Union[str, EmailStr]) -> bool:
         return await User.filter(useremail=useremail).exists()
+
+    async def get_all(self) -> List[User]:
+        return await User.all()
