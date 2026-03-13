@@ -25,3 +25,20 @@ class UserMeRead(UserRead):
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
+
+
+class QuoteRead(BaseModel):
+    id: int
+    content: str
+    author: str
+
+    class Config:
+        from_attributes = True
+
+
+class BookmarkRead(BaseModel):
+    id: int
+    quote: QuoteRead
+
+    class Config:
+        from_attributes = True

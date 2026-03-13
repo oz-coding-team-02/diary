@@ -15,8 +15,8 @@ async def signup(data: UserBase, service: UserService = Depends(get_user_service
 
 @router.post("/login", response_model=TokenResponse)
 async def login(
-        data: OAuth2PasswordRequestForm = Depends(),
-        service: UserService = Depends(get_user_service)
+    data: OAuth2PasswordRequestForm = Depends(),
+    service: UserService = Depends(get_user_service),
 ):
     return await service.login_user(data)
 
