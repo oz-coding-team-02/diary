@@ -15,6 +15,9 @@ class DiaryPlusID(DiaryBase):
     created_at: datetime
 
 
-class DiaryDelete(DiaryBase):
+class DiaryDelete(BaseModel):
     msg: str
     target_title: str
+
+    class Config:
+        from_attributes = True
